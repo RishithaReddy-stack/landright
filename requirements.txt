@@ -1,0 +1,34 @@
+# api
+fastapi==0.111.0
+uvicorn==0.29.0
+pydantic==2.7.1
+python-multipart==0.0.9
+
+# agent
+langgraph==0.1.19
+langchain==0.2.5
+langchain-groq==0.1.6
+
+# mcp
+mcp==0.9.1
+
+# vector db
+qdrant-client==1.9.1
+
+# relational db
+asyncpg==0.29.0
+sqlalchemy==2.0.30
+
+# embeddings
+sentence-transformers==3.0.1
+
+# frontend
+streamlit==1.35.0
+
+# config
+python-dotenv==1.0.1
+
+# testing
+pytest==8.2.0
+pytest-asyncio==0.23.7
+httpx==0.27.0
