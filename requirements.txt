@@ -8,6 +8,7 @@ python-multipart==0.0.9
 langgraph==0.1.19
 langchain==0.2.5
 langchain-groq==0.1.6
+langchain-community==0.2.5
 
 # mcp
 mcp==0.9.1
@@ -21,6 +22,10 @@ sqlalchemy==2.0.30
 
 # embeddings
 sentence-transformers==3.0.1
+
+# utils
+python-dotenv==1.0.1
+pydantic-settings==2.3.0
 
 # frontend
 streamlit==1.35.0

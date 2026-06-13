@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+venv/
+.DS_Store
+*.egg-info/
+uploads/
+.qdrant/
+backend/**/__pycache__/
+**/*.cpython-311.pyc
