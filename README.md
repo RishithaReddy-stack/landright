@@ -17,7 +17,7 @@
 ## What is this?
 
 When you land in the US as an international student, nobody hands you a manual.
-You're expected to figure out — in the right order — things like:
+You're expected to figure out in the right order. Things like:
 
 - Which eSIM to buy before you board
 - How to open a bank account without an SSN
@@ -26,7 +26,7 @@ You're expected to figure out — in the right order — things like:
 - How OPT and CPT work before it's too late to plan
 
 LandRight is an AI copilot that knows all of this and tells you exactly what
-to do, in what order, based on your specific stage — in plain English, not government-speak.
+to do, in what order, based on your specific stage in plain English, not government speak.
 
 ---
 
@@ -63,9 +63,9 @@ Response
 ```
 
 This is a full **RAG (Retrieval Augmented Generation)** pipeline:
-1. **Retrieval** — Qdrant finds the most semantically relevant documents from the knowledge base using vector similarity search
-2. **Augmentation** — retrieved documents are passed as context to the LLM
-3. **Generation** — LLaMA3 via AWS Bedrock generates a grounded, conversational answer
+1. **Retrieval** : Qdrant finds the most semantically relevant documents from the knowledge base using vector similarity search
+2. **Augmentation** : retrieved documents are passed as context to the LLM
+3. **Generation** : LLaMA3 via AWS Bedrock generates a grounded, conversational answer
 
 ---
 
@@ -178,11 +178,11 @@ I built LandRight to be the guide I wish I had.
 
 ## Roadmap
 
-- [ ] Personalisation — visa type, state, university aware responses
-- [ ] Deadline tracker — OPT application reminders, tax deadlines
-- [ ] Community Q&A — real questions from real students
-- [ ] Voice interface — ask questions out loud
-- [ ] University-specific info — different rules for different schools
+- [ ] Personalisation : visa type, state, university aware responses
+- [ ] Deadline tracker : OPT application reminders, tax deadlines
+- [ ] Community Q&A : real questions from real students
+- [ ] Voice interface : ask questions out loud
+- [ ] University-specific info : different rules for different schools
 
 ---
 
