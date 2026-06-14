@@ -1,205 +1,133 @@
-# LandRight 🛬
-### AI Copilot for International Students
+# Financial Document AI Assistant
 
-> Built by an international student, for international students.
-> Because figuring out the US shouldn't feel like solving a puzzle blindfolded.
+A privacy-preserving RAG (Retrieval-Augmented Generation) application for querying financial documents using local LLM inference — no cloud APIs, no data leaves your machine.
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?style=flat-square&logo=fastapi)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.35-red?style=flat-square&logo=streamlit)
-![Groq](https://img.shields.io/badge/Groq-LLaMA3-orange?style=flat-square)
-![Qdrant](https://img.shields.io/badge/Qdrant-Vector_DB-purple?style=flat-square)
-![MCP](https://img.shields.io/badge/MCP-Anthropic-black?style=flat-square)
+![Stack](https://img.shields.io/badge/React-Frontend-blue) ![Stack](https://img.shields.io/badge/Node.js-Backend-green) ![Stack](https://img.shields.io/badge/Llama_3.2-LLM-orange) ![Stack](https://img.shields.io/badge/Ollama-Inference-red)
 
----
+## What it does
 
-## What is this?
+Upload any financial PDF (10-K, earnings report, policy document) and ask questions about it in plain English. The system retrieves the most relevant sections and generates accurate, grounded answers using a locally-running Llama 3.2 model.
 
-When you land in the US as an international student, nobody hands you a manual.
-You're expected to figure out — in the right order — things like:
+**Example queries:**
+- *"What were Tesla's total revenues in 2025?"*
+- *"What are the main risk factors mentioned?"*
+- *"What does management say about the energy storage business?"*
 
-- Which eSIM to buy before you board
-- How to open a bank account without an SSN
-- What to bring to the DMV and in what order
-- When you can apply for an SSN (hint: not right away)
-- How OPT and CPT work before it's too late to plan
+## Architecture
 
-LandRight is an AI copilot that knows all of this and tells you exactly what
-to do, in what order, based on your specific stage — in plain English, not government-speak.
-
----
-
-## Demo
-
-> Ask it anything:
-> *"How do I open a bank account without an SSN?"*
-> *"What do I need for my state ID?"*
-> *"Explain OPT vs CPT like I'm 5"*
-> *"What taxes do I need to file as an F1 student?"*
-
----
-
-## How it works:
-
-
-User question
-
-↓
-
-Streamlit UI
-
-↓
-
-FastAPI backend
-
-↓
-
-LangGraph agent
-
-↓
-
-MCP server (exposes tools)
-
-↓
-
-Qdrant vector search (finds relevant knowledge)
-
-↓
-
-Groq LLM (generates answer from retrieved context)
-
-↓
-
-Response
-
-
-
-This is a full **RAG (Retrieval Augmented Generation)** pipeline:
-1. **Retrieval** — Qdrant finds the most semantically relevant documents from the knowledge base using vector similarity search
-2. **Augmentation** — retrieved documents are passed as context to the LLM
-3. **Generation** — Groq's LLaMA3 generates a grounded, conversational answer
-
----
-
-## Tech stack
-
-| Layer | Technology | Why |
-|---|---|---|
-| Frontend | Streamlit | Fast to ship, perfect for AI apps |
-| Backend | FastAPI | Industry standard, async-ready |
-| Agent | LangGraph | State-managed agent orchestration |
-| Tools | MCP (Anthropic) | Exposes knowledge base as callable tools |
-| Vector DB | Qdrant | Fast, modern, free to self-host |
-| Embeddings | sentence-transformers | Local, no API cost |
-| LLM | Groq (LLaMA3) | Free tier, extremely fast inference |
-| Language | Python 3.11 | — |
-
----
-
-## MCP tools
-
-The MCP server exposes three tools the agent can call:
-
-| Tool | What it does |
-|---|---|
-| `search_docs(query)` | Semantic search over the knowledge base |
-| `get_roadmap(stage)` | Returns ordered action steps for a given stage |
-| `get_checklist(stage)` | Returns a checklist for a given stage |
-
----
-
-## Knowledge base
-
-Covers the full international student journey:
-
-| Stage | Topics |
-|---|---|
-| Pre-arrival | eSIM setup, housing, lease checklist, scam red flags |
-| Day 0 | SEVIS check-in, DSO meeting, I-20 validation |
-| Week 1 | Bank account (no SSN needed), state ID, health insurance |
-| Month 1 | Credit building, secured cards, financial foundations |
-| Ongoing | SSN eligibility, taxes, OPT/CPT timelines, work authorisation |
-
----
-
-## Project structure
-landright/
-
-├── backend/
-
-│   ├── agents/          # LangGraph agent + conversation logic
-
-│   ├── api/             # FastAPI routes and schemas
-
-│   ├── core/            # Config, LLM setup, embeddings
-
-│   ├── db/              # Qdrant vector DB client
-
-│   ├── knowledge/       # Knowledge base content
-
-│   └── mcp/             # MCP server + tool definitions
-
-├── frontend/
-
-│   └── app.py           # Streamlit UI
-
-├── tests/               # pytest test suite
-
-├── .github/workflows/   # CI/CD
-
-└── docker-compose.yml
-
-
----
-
-## Quickstart
-
-```bash
-# 1. Clone and set up
-git clone https://github.com/RishithaReddy-stack/landright.git
-cd landright
-python3.11 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-
-# 2. Set up environment
-cp .env.example .env
-# Add your GROQ_API_KEY to .env
-
-# 3. Start Qdrant
-docker run -d -p 6333:6333 qdrant/qdrant
-
-# 4. Index the knowledge base
-PYTHONPATH=. python backend/db/qdrant.py
-
-# 5. Run the app
-PYTHONPATH=. streamlit run frontend/app.py
+```
+PDF Upload → Text Extraction → Chunking (1500 chars, 200 overlap)
+     ↓
+Embedding (nomic-embed-text via Ollama)
+     ↓
+In-Memory Vector Store (custom cosine similarity search)
+     ↓
+Top-K Chunk Retrieval → Prompt Engineering → Llama 3.2 (local)
+     ↓
+Answer → React Chat UI
 ```
 
----
+## Tech Stack
 
-## Why I built this
+**Frontend**
+- React + Vite
+- Drag-and-drop PDF upload
+- Real-time chat interface with typing indicators
 
-I'm an international student. When I landed, I had no idea what to do first —
-whether to get a SIM card, find housing, open a bank account, or go to the
-international office. Nobody tells you the order. Nobody tells you the gotchas.
+**Backend**
+- Node.js + Express REST API
+- `pdf-parse` for text extraction
+- `@langchain/textsplitters` for recursive chunking
+- Custom cosine similarity vector search (no external vector DB dependency)
+- `@langchain/ollama` for embeddings and LLM inference
 
-I built LandRight to be the guide I wish I had.
+**Models (via Ollama — fully local)**
+- `nomic-embed-text` — document and query embeddings
+- `llama3.2` — answer generation
 
----
+## Why local inference?
 
-## What's next
+Financial documents contain sensitive data. Running everything on-device means:
+- Zero data transmitted to third-party APIs
+- No per-token costs
+- Works fully offline
+- Suitable for regulated environments
 
-- [ ] Personalisation — visa type, state, university aware responses
-- [ ] Deadline tracker — OPT application reminders, tax deadlines
-- [ ] Community Q&A — real questions from real students
-- [ ] Voice interface — ask questions out loud
-- [ ] University-specific info — different rules for different schools
+## Getting Started
 
----
+### Prerequisites
+- Node.js 18+
+- [Ollama](https://ollama.com) installed and running
 
-## Author
+### 1. Pull required models
+```bash
+ollama pull llama3.2
+ollama pull nomic-embed-text
+```
 
-**Rishitha Reddy** — international student, AI engineer in training.
+### 2. Clone and install
+```bash
+git clone https://github.com/RishithaReddy-stack/fin-doc-assistant.git
+cd fin-doc-assistant
 
-[GitHub](https://github.com/RishithaReddy-stack)
+# Install backend dependencies
+cd backend && npm install
 
+# Install frontend dependencies
+cd ../frontend && npm install
+```
+
+### 3. Configure environment
+```bash
+cd backend
+cp .env.example .env
+# Edit .env if needed (default port is 3001)
+```
+
+### 4. Run the app
+```bash
+# Terminal 1 — Start Ollama
+ollama serve
+
+# Terminal 2 — Start backend
+cd backend && node server.js
+
+# Terminal 3 — Start frontend
+cd frontend && npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
+
+## How it works
+
+1. **Upload** — PDF is sent to the backend via multipart form upload
+2. **Extract** — `pdf-parse` extracts raw text from the PDF
+3. **Chunk** — Text is split into 1500-character overlapping chunks using `RecursiveCharacterTextSplitter`
+4. **Embed** — Each chunk is embedded using `nomic-embed-text` running locally via Ollama
+5. **Store** — Chunk embeddings are stored in memory with a unique document ID
+6. **Query** — User question is embedded, cosine similarity is computed against all chunks, top 8 are retrieved
+7. **Generate** — Retrieved chunks are injected into a prompt and sent to Llama 3.2 for answer generation
+
+## Project Structure
+
+```
+fin-doc-assistant/
+├── backend/
+│   ├── server.js        # Express API — upload and chat endpoints
+│   ├── .env.example     # Environment variable template
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx      # Main React component — upload flow and chat UI
+│   │   └── index.css    # Styles
+│   └── package.json
+├── tesla/               # Sample Tesla 10-K PDF for testing
+├── ragService.js        # Core RAG logic — chunking, embedding, retrieval, generation
+└── README.md
+```
+
+## Limitations
+
+- Vector store is in-memory — documents are cleared on server restart
+- Optimized for text-based PDFs; scanned documents require OCR preprocessing
+- Response speed depends on local hardware (Apple Silicon recommended)

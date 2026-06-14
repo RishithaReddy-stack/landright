@@ -1,13 +1,8 @@
-from langchain_groq import ChatGroq
 from langchain.schema import SystemMessage, HumanMessage
 from backend.mcp.tools import search_docs, get_roadmap, get_checklist
-from backend.core.config import settings
+from backend.core.llm import get_llm
 
-llm = ChatGroq(
-    api_key=settings.groq_api_key,
-    model="llama-3.1-8b-instant",
-    temperature=0.3
-)
+llm = get_llm()
 
 SYSTEM_PROMPT = """You are LandRight, a friendly AI copilot for international students arriving in the US.
 You talk like a helpful older student who has been through it all — warm, casual, and honest.
